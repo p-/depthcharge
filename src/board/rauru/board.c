@@ -5,7 +5,6 @@
 
 #include "base/device_tree.h"
 #include "base/init_funcs.h"
-#include "boot/commandline.h"
 #include "drivers/bus/i2c/mtk_i2c.h"
 #include "drivers/bus/spi/mtk.h"
 #include "drivers/bus/i2s/mtk_v3.h"
@@ -28,7 +27,6 @@
 #include "drivers/video/display.h"
 #include "drivers/video/mtk_ddp.h"
 #include "vboot/util/flag.h"
-#include "vboot/util/memory.h"
 
 static int fix_device_tree(struct device_tree_fixup *fixup, struct device_tree *tree)
 {
@@ -248,14 +246,6 @@ static int board_setup(void)
 		list_insert_after(&reserve_framebuffer_fixup.list_node, &device_tree_fixups);
 	} else {
 		printf("[%s] no display_init_required()!\n", __func__);
-	}
-
-	if (!CONFIG(ANDROID_MTE)) {
-		/* Disable MTE support for ChromeOS. b:375543707 */
-		commandline_append("arm64.nomte");
-		/* The tag storage may be reserved in coreboot stage.
-		   Free tag storage when MTE is disabled. */
-		memory_free_tag_storage();
 	}
 
 	return 0;
