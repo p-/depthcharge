@@ -12,6 +12,7 @@ void ui_beep(uint32_t msec, uint32_t frequency)
 	int ret;
 	int need_stop = 1;
 
+	return; /* beeps disabled in this build */
 	/* Zero-length beep should return immediately. */
 	if (msec == 0)
 		return;
